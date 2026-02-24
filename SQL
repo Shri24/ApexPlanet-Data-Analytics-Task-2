@@ -1,0 +1,201 @@
+# 🎬 IMDb Movie Data Analysis (Python + SQL Approach)
+
+This project performs Exploratory Data Analysis (EDA) on an IMDb movie dataset using **Python (Pandas, Matplotlib, Seaborn)** and maps each analysis step to equivalent **SQL queries** used in real-world data analytics.
+
+---
+
+# 📌 1. Dataset Overview
+
+Table Name: `imdb_movies`
+
+Columns:
+- imdb_id
+- title
+- release_date
+- genre
+- duration
+- country
+- content_rating
+- director
+- income
+- votes
+- score
+
+---
+
+# 🧹 2. Data Cleaning (SQL Equivalent)
+
+## 🗓 Convert release_date to DATE
+```sql
+ALTER TABLE imdb_movies
+ALTER COLUMN release_date DATE;
+```
+
+## 📅 Extract Release Year
+```sql
+SELECT 
+    title,
+    EXTRACT(YEAR FROM release_date) AS release_year
+FROM imdb_movies;
+```
+
+## 🔢 Convert Numeric Columns
+```sql
+SELECT 
+    CAST(duration AS FLOAT),
+    CAST(income AS FLOAT),
+    CAST(votes AS INT),
+    CAST(score AS FLOAT)
+FROM imdb_movies;
+```
+
+## ❌ Handle Missing Values
+```sql
+SELECT *
+FROM imdb_movies
+WHERE score IS NULL 
+   OR duration IS NULL;
+```
+
+---
+
+# 📊 3. Basic EDA Queries
+
+## 📦 Dataset Size
+```sql
+SELECT COUNT(*) AS total_movies
+FROM imdb_movies;
+```
+
+## 📈 Statistical Summary (Example for Score)
+```sql
+SELECT 
+    MIN(score) AS min_score,
+    MAX(score) AS max_score,
+    AVG(score) AS avg_score,
+    COUNT(score) AS total_scores
+FROM imdb_movies;
+```
+
+---
+
+# 🎬 4. Movies Released Per Year
+
+```sql
+SELECT 
+    EXTRACT(YEAR FROM release_date) AS release_year,
+    COUNT(*) AS total_movies
+FROM imdb_movies
+GROUP BY release_year
+ORDER BY release_year;
+```
+
+---
+
+# 🎭 5. Top 10 Genres
+
+```sql
+SELECT 
+    genre,
+    COUNT(*) AS total_movies
+FROM imdb_movies
+GROUP BY genre
+ORDER BY total_movies DESC
+LIMIT 10;
+```
+
+---
+
+# 🌍 6. Top Producing Countries
+
+```sql
+SELECT 
+    country,
+    COUNT(*) AS total_movies
+FROM imdb_movies
+GROUP BY country
+ORDER BY total_movies DESC
+LIMIT 10;
+```
+
+---
+
+# 💰 7. Income vs Score Analysis
+
+```sql
+SELECT 
+    title,
+    income,
+    score
+FROM imdb_movies
+WHERE income IS NOT NULL 
+  AND score IS NOT NULL;
+```
+
+To calculate correlation (PostgreSQL example):
+
+```sql
+SELECT CORR(income, score) 
+FROM imdb_movies;
+```
+
+---
+
+# 🏆 8. Top 10 Highest Rated Movies
+
+```sql
+SELECT 
+    title,
+    score
+FROM imdb_movies
+ORDER BY score DESC
+LIMIT 10;
+```
+
+---
+
+# 🔥 9. Votes vs Income Relationship
+
+```sql
+SELECT 
+    votes,
+    income
+FROM imdb_movies
+WHERE votes IS NOT NULL 
+  AND income IS NOT NULL;
+```
+
+---
+
+# 📊 10. Business Insights (Using SQL Logic)
+
+✔ Movies with higher votes tend to generate higher income  
+✔ Certain genres dominate production  
+✔ Movie releases increased significantly after 2000  
+✔ Financial success does not always guarantee higher IMDb ratings  
+
+---
+
+# 🛠 Tools Used
+
+- Python (Pandas, NumPy)
+- Matplotlib & Seaborn
+- SQL (PostgreSQL / MySQL syntax)
+- Jupyter Notebook
+
+---
+
+# 🚀 Conclusion
+
+This project demonstrates how EDA performed in Python can be translated into SQL queries used in real-world business analytics environments.  
+
+It bridges:
+- Data Cleaning  
+- Aggregation  
+- Grouping  
+- Ranking  
+- Correlation Analysis  
+
+This reflects real-world Data Analyst workflow using SQL + Python.
+
+---
